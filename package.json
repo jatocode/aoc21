@@ -1,0 +1,23 @@
+{
+  "name": "aoc21",
+  "version": "1.0.0",
+  "description": "Advent of Code 2021",
+  "main": "run.js",
+  "scripts": {
+    "today": "today.sh",
+    "test today": "today.sh test",
+    "alldays": "alldays.sh",
+    "test alldays": "alldays.sh test",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jatocode/aoc21.git"
+  },
+  "author": "Tobias",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/jatocode/aoc21/issues"
+  },
+  "homepage": "https://github.com/jatocode/aoc21#readme"
+}
