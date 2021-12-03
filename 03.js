@@ -2,7 +2,7 @@ const fs = require('fs');
 const args = process.argv.slice(2);
 
 const data = fs.readFileSync(args[0], 'utf8');
-const lines = data.split('\n');
+const lines = data.split('\n').map(x => x.trim()); // trim pga fick strul med \r
 
 let count = countBits(lines);
 let gamma, epsilon;
