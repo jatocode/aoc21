@@ -6,7 +6,7 @@ for day in {01..25}; do
     then
         input="data/$day-ex.txt"
     else
-        input="data/$day-in.txt"
+        input="data/$day-input.txt"
     fi
     if test -f "$exe"; then
         echo "-- Dag $day --"
