@@ -16,15 +16,21 @@ for (let b = 2; b < lines.length; b += 6) {
     brickor.push(bricka);
 }
 
-console.log(loket());
+let winners = loket();
+console.log('Del 1', winners[0]);
+console.log('Del 2', winners.pop());
+
 
 function loket() {
     let winrow = [];
     let wincol = [];
     let bres = [];
+    let winbricks = [];
+    let winbricknums = [];
     for (let ni = 0; ni < numbers.length; ni++) {
         const n = numbers[ni];
         for (let bi = 0; bi < brickor.length; bi++) {
+            if(winbricknums.includes(bi)) continue;
             const bricka = brickor[bi];
             if(!bres[bi]) bres[bi] = [new Set(), new Set()];
             for (let row = 0; row < 5; row++) {
@@ -42,12 +48,13 @@ function loket() {
                             // Remove winners 
                             bres[bi][0].forEach(x => bres[bi][1].delete(x));
                             let sum = [...bres[bi][1]].reduce((t,c) => t + c);
-                            return [n*sum, bi, n, sum];
+                            winbricks.push([bi, n*sum])
+                            winbricknums.push(bi);
                         }
                     } 
                 } 
             }
         }
     }
-    return false;
+    return winbricks;
 }
