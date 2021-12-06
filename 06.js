@@ -33,20 +33,20 @@ console.log('Del 1 efter', days, 'dagar, totalt:', school.length, ', time to cal
 
 start = Date.now();
 // Räknar hur många som är i varje timer/cykel istället för att hålla koll på fiskarna
-let cycle = [0, 0, 0, 0, 0, 0, 0, 0, 0];
-fish.forEach(age => cycle[age] += 1);
+let lanterns = [0, 0, 0, 0, 0, 0, 0, 0, 0];
+fish.forEach(timer => lanterns[timer] += 1);
 
 days = 256;
 for (let day = 0; day < days; day++) {
     // Plocka ut de som ska göra nya fiskar, rotera allt ett steg
-    const [created, ...restCycle] = cycle;
+    const [created, ...restCycle] = lanterns;
     
     // Lägg de sist
-    cycle = [...restCycle, created];
+    lanterns = [...restCycle, created];
 
     // Öka antalet som har timer 6 med lika många som ska bli nya
-    cycle[6] += created;
+    lanterns[6] += created;
 }
 
-let fiskar = cycle.reduce((a, fish) => a + fish);
-console.log('Del 2 efter', days, 'dagar, totalt:', fiskar, ', time to calc:',Date.now() - start, 'ms');
+let antalfisk = lanterns.reduce((a, fish) => a + fish);
+console.log('Del 2 efter', days, 'dagar, totalt:', antalfisk, ', time to calc:',Date.now() - start, 'ms');
