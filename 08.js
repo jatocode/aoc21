@@ -10,6 +10,9 @@ let del2 = 0;
 lines.forEach(l => {
     const [pattern, output] = l.split('|').map(x => x.split(' ').filter(x => x.length > 0));
 
+    let display = '';
+    let dictionary = rosetta(pattern);
+
     output.forEach(o => {
         // Del 1
         switch (o.length) {
@@ -28,8 +31,6 @@ lines.forEach(l => {
         }
 
         // Del 2
-        let display = '';
-        let dictionary = rosetta(pattern);
         display += findDigit(o, dictionary);
     });
 
