@@ -6,8 +6,7 @@ let lines = input.split(/\r?\n/);
 
 let [one, seven, four, eight] = [0, 0, 0, 0];
 let del2 = 0;
-//lines = ['be cfbegad cbdgef fgaecd cgeb fdcge agebfd fecdb fabcd edb | fdgacbe cefdb cefbgd gcbe'];
-// lines = ['acedgfb cdfbe gcdfa fbcad dab cefabd cdfgeb eafb cagedb ab | cdfeb fcadb cdfeb cdbaf'];
+
 lines.forEach(l => {
     const [pattern, output] = l.split('|').map(x => x.split(' ').filter(x => x.length > 0));
 
@@ -68,13 +67,14 @@ function rosetta(pattern) {
                     if (chars[1] && (!p.includes(chars[1][0]) || !p.includes(chars[1][1]))) {
                         chars[6] = p;
                     } else {
-                        // Det är 0 eller 9, men 9:an skiljer bara ett steg från 5
-                        if (chars[5].length > 0) {
-                            let t = p.split('').filter(x => !chars[5].includes(x)).join('');
-                            if (t.length == 1) {
-                                // 9 är nästan 5
+                        // Det är 0 eller 9, men 9:an innehåller hela 4
+                        if (chars[4].length > 0) {
+                            let t = chars[4].split('').filter(x => !p.includes(x));
+                            if (t.length == 0) {
+                                // Det är 9
                                 chars[9] = p;
                             } else {
+                                // Då är det 0
                                 chars[0] = p;
                             }
                         }
@@ -86,7 +86,7 @@ function rosetta(pattern) {
                         chars[3] = p;
                     } else {
                         if (chars[6].length > 0) {
-                            let t = chars[6].split('').filter(x => !p.includes(x)).join('');
+                            let t = chars[6].split('').filter(x => !p.includes(x));
                             if (t.length == 1) {
                                 // 5 är nästan 6
                                 chars[5] = p;
@@ -101,7 +101,7 @@ function rosetta(pattern) {
             }
         });
     }
-    // Sortera för att lätt jämföra
+    // Sortera för att jämföra
     chars = chars.map(x => x.split('').sort().join(''));
     
     return chars;
