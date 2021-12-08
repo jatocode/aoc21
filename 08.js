@@ -30,8 +30,7 @@ lines.forEach(l => {
         }
 
         // Del 2
-        let sorted = o.split('').sort().join('');
-        display += dictionary.findIndex(x => x == sorted) + '';
+        display += findDigit(o, dictionary);
     });
 
     del2 += parseInt(display);
@@ -39,6 +38,12 @@ lines.forEach(l => {
 
 console.log('Del 1:', one + seven + four + eight);
 console.log('Del 2:', del2);
+
+function findDigit(scrambled, dictionary) {
+    let sorted = scrambled.split('').sort().join('');
+
+    return dictionary.findIndex(x => x == sorted) + '';
+}
 
 function rosetta(pattern) {
     let chars = [];
@@ -48,8 +53,7 @@ function rosetta(pattern) {
     while(found < 10) {
         found = chars.filter(x => x.length > 0).length;
         pattern.forEach((p, i) => {
-            const l = p.length;
-            switch (l) {
+            switch(p.length) {
                 case 2: // 1
                     chars[1] = p;
                     break;
@@ -95,8 +99,6 @@ function rosetta(pattern) {
                             }
                         }
                     }
-                    break;
-                default:
                     break;
             }
         });
