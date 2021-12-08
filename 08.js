@@ -47,13 +47,11 @@ function findDigit(scrambled, dictionary) {
 }
 
 function rosetta(pattern) {
-    let chars = [];
-    for (let i = 0; i < 10; i++) chars[i] = [];
+    let chars = Array(10).fill([]);
 
-    let found = 0;
-    while(found < 10) {
-        found = chars.filter(x => x.length > 0).length;
-        pattern.forEach((p, i) => {
+    // Hitta alla siffrorna
+    while(chars.filter(x => x.length > 0).length < 10) {
+        pattern.forEach(p => {
             switch(p.length) {
                 case 2: // 1
                     chars[1] = p;
