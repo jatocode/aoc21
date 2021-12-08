@@ -1,6 +1,7 @@
 #!/bin/bash
 
-for day in {01..25}; do
+for day in $(seq -f "%02g" 1 25)
+do
     exe=$day.js
     if [ $# -gt 0 ] && [ $1 = "test" ] 
     then
