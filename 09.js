@@ -34,13 +34,14 @@ console.log('Del 1, risklevel=', risklevel);
 // Del 2
 let basins = [];
 lows.forEach(pos => {
-    let b = basin(pos, []);
+    let b = basin(pos);
     basins.push(b.length);
 })
 let bl = basins.sort((a, b) => b - a);
 console.log('Del 2: Basins multiplied', bl[0] * bl[1] * bl[2]);
 
 function basin(pos, locs) {
+    if(locs == undefined) locs = [];
     if (!locs.includes(pos)) locs.push(pos);
 
     let nbp = neighbours(pos);
