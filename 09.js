@@ -13,28 +13,25 @@ lines.forEach((line, y) => {
     }
 });
 
-let lows = [];
+let basins = [];
 let risklevel = 0;
 Object.keys(heightmap).forEach(pos => {
-    let [x, y] = pos.split(':').map(x => parseInt(x));
-    let nb = neighbourHeights(x, y);
-    let h = height(x, y);
+    let nb = neighbourHeights(pos);
+    let h = heightmap[pos];
 
-    // Del 1
+    // Hitta lägstapunkterna
     if (h < Math.min(...nb)) {
-        lows.push(pos);
+        // Del 1
         risklevel += (h + 1);
+
+        // Del 2
+        let b = basin(pos);
+        basins.push(b.length);
     }
 })
 
 console.log('Del 1, risklevel=', risklevel);
 
-// Del 2
-let basins = [];
-lows.forEach(pos => {
-    let b = basin(pos);
-    basins.push(b.length);
-})
 let bl = basins.sort((a, b) => b - a);
 console.log('Del 2: Basins multiplied', bl[0] * bl[1] * bl[2]);
 
@@ -71,7 +68,9 @@ function neighbours(pos) {
     ];
 };
 
-function neighbourHeights(x, y) {
+function neighbourHeights(pos) {
+    let [x, y] = pos.split(':').map(x => parseInt(x));
+
     return [
         height(x - 1, y),
         height(x, y - 1),
