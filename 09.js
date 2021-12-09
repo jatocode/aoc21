@@ -4,8 +4,6 @@ const args = process.argv.slice(2);
 const input = fs.readFileSync(args[0], 'utf8');
 let lines = input.split(/\r?\n/);
 
-let [x, y] = [0, 0];
-
 let heightmap = [];
 let width = lines[0].length;
 lines.forEach((line, y) => {
@@ -81,16 +79,4 @@ function neighbourHeights(x, y) {
         height(x + 1, y),
         height(x, y + 1)
     ].filter(x => x != undefined);
-}
-
-function print(b) {
-    for (let y = 0; y < 5; y++) {
-        let line = '';
-        for (let x = 0; x < 10; x++) {
-            line += height(x, y);
-            if (b && b.includes(x + ':' + y)) line += '*'; else line += ' ';
-        }
-        console.log(line);
-    }
-    console.log();
 }
