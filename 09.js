@@ -27,33 +27,33 @@ Object.keys(heightmap).forEach(pos => {
         lows.push(pos);
         risklevel += (h + 1);
     }
-
-    console.log('basin',basin(pos, []));
-
 })
-
 
 console.log('Del 1, risklevel=', risklevel);
 
+// Del 2
+let basins = [];
+lows.forEach(pos => {
+    let b = basin(pos, []);
+    basins.push(b.length);
+})
+let bl = basins.sort((a, b) => b - a);
+console.log('Del 2: Basins multiplied', bl[0] * bl[1] * bl[2]);
+
 function basin(pos, locs) {
+    if (!locs.includes(pos)) locs.push(pos);
+
     let nbp = neighbours(pos);
-    let oknb = nbp.filter(pos => {
-        let [x, y] = pos.split(':').map(x => parseInt(x));
-        return !locs.includes(pos) && heightmap[pos] != undefined;
+    let oknb = nbp.filter(p => {
+        return p != pos && !locs.includes(p) && heightmap[p] != undefined && heightmap[p] != 9
     });
 
-    let nbh = oknb.map(pos => heightmap[pos]);
     let h = heightmap[pos];
-    if (h < Math.min(...nbh.filter(x => x!= undefined))) {
-        console.log(pos, h, oknb, nbh);
-        locs.push(pos);
-        oknb.forEach(b => {
-            console.log(b);
-
-            locs.push(basin(b, locs));
-        });
-       
-    }
+    oknb.forEach(b => {
+        if (heightmap[b] > h) {
+            basin(b, locs)
+        } 
+    });
 
     return locs;
 }
@@ -69,11 +69,7 @@ function neighbours(pos) {
         (x - 1) + ':' + y,
         x + ':' + (y - 1),
         (x + 1) + ':' + y,
-        x + ':' + (y + 1),
-        (x - 1) + ':' + (y - 1),
-        (x + 1) + ':' + (y - 1),
-        (x + 1) + ':' + (y + 1),
-        (x - 1) + ':' + (y + 1)
+        x + ':' + (y + 1)
     ];
 };
 
@@ -82,11 +78,18 @@ function neighbourHeights(x, y) {
         height(x - 1, y),
         height(x, y - 1),
         height(x + 1, y),
-        height(x, y + 1),
-
-        height(x - 1, y - 1),
-        height(x + 1, y - 1),
-        height(x + 1, y + 1),
-        height(x - 1, y + 1)
+        height(x, y + 1)
     ].filter(x => x != undefined);
+}
+
+function print(b) {
+    for (let y = 0; y < 5; y++) {
+        let line = '';
+        for (let x = 0; x < 10; x++) {
+            line += height(x, y);
+            if (b && b.includes(x + ':' + y)) line += '*'; else line += ' ';
+        }
+        console.log(line);
+    }
+    console.log();
 }
