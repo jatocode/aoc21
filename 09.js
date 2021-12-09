@@ -44,7 +44,7 @@ function basin(pos, locs) {
 
     let nbp = neighbours(pos);
     let oknb = nbp.filter(p => {
-        return p != pos && !locs.includes(p) && heightmap[p] != undefined && heightmap[p] != 9
+        return !locs.includes(p) && heightmap[p] != undefined && heightmap[p] != 9
     });
 
     oknb.forEach(nb => {
