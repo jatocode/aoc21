@@ -47,10 +47,9 @@ function basin(pos, locs) {
         return p != pos && !locs.includes(p) && heightmap[p] != undefined && heightmap[p] != 9
     });
 
-    let h = heightmap[pos];
-    oknb.forEach(b => {
-        if (heightmap[b] > h) {
-            basin(b, locs)
+    oknb.forEach(nb => {
+        if (heightmap[nb] > heightmap[pos]) {
+            basin(nb, locs)
         } 
     });
 
