@@ -20,28 +20,28 @@ lines.forEach(line => {
 let score = 0;
 //console.log(errors);
 errors.forEach(e => {
+    const scores = [3, 57, 1197, 25137];
     if (e.length > 0) {
-        let scores = [3, 57, 1197, 25137];
-        let c = e[0];
-        score += scores[right.indexOf(c)];
-    }
+        score += scores[right.indexOf(e)];
+    } 
 })
 
 console.log('Del 1:', score);
 
 let compscores = [];
 incomplete.forEach(ic => {
+    const scores = [1, 2, 3, 4];
     score = 0;
     if (ic.length > 0) {
-        ic[0].forEach(c => {
+        ic.forEach(c => {
             score *= 5;
-            let scores = [1, 2, 3, 4];
             score += scores[right.indexOf(c)];
         });
         compscores.push(score);
     }
-})
-console.log(compscores.sort((a,b) => a-b).join());
+});
+
+compscores.sort((a,b) => a-b);
 let median = compscores[Math.floor(compscores.length/2)];
 console.log('Del 2:', median);
 
@@ -66,14 +66,14 @@ function findCorrupt(line) {
                 //      console.log(stack.join(' '));
             } else {
                 //      console.log('found',c,'expected',last);
-                errors.push(c);
+                errors = c;
                 break;
             }
         }
 
         if (i == line.length - 1) {
             console.log('unclosed at end', stack.join(''), 'to close', stack.reverse().join(''));
-            incomplete.push(stack);
+            incomplete = stack;
         }
     }
 
