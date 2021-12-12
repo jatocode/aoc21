@@ -41,12 +41,12 @@ function raiseEnergy(pos, flashed) {
     if (octopuses[pos] > 9) {
         // flash!
         flashes++;
-        if (!flashed.includes(pos)) flashed.push(pos);
+        flashed.push(pos);
         octopuses[pos] = 0;
 
         // Hitta vettiga grannar
         let nbp = neighbours(pos);
-        let oknb = nbp.filter(p => !flashed.includes(p) && octopuses[p] != undefined);
+        let oknb = nbp.filter(p => octopuses[p] != undefined);
         oknb.forEach(nb => {
             raiseEnergy(nb, flashed);
         });
