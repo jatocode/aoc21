@@ -24,27 +24,26 @@ console.log('Del 1, antal vägar', paths.length);
 
 paths = [];
 dfs('start', [], paths, (c, p) => part2Rule(c, p));
-//console.table(paths);
 console.log('Del 2, antal vägar', paths.length);
 
 function dfs(currcave, path, paths, rule) {
 
     if (rule(currcave, path)) {
+        // Don't go down this road
         return;
     }
 
+    // concat istället för push, vill inte peta på samma path objekt, behöver ett nytt
     if (currcave == 'end') {
-        let np = [...path];
-        np.push(currcave);
-        paths.push(np);
+        let newp = path.concat(currcave);
+        paths.push(newp);
         return;
     }
     let connections = caves[currcave];
 
     connections.forEach(c => {
-        let np = [...path];
-        np.push(currcave);
-        dfs(c, np, paths, rule);
+        let newp = path.concat(currcave);
+        dfs(c, newp, paths, rule);
     });
 }
 
@@ -56,7 +55,6 @@ function part1Rule(cave, path) {
 function part2Rule(cave, path) {
     if (cave == 'start' && path.includes(cave)) return true;
 
-    // Antal små
     let smvisits = path.filter(c => c == c.toLowerCase());
     // Antal unika små
     let uq = [...new Set(smvisits)];
