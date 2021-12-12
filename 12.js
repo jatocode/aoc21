@@ -1,3 +1,4 @@
+const { on } = require('events');
 const fs = require('fs');
 const args = process.argv.slice(2);
 
@@ -18,15 +19,17 @@ lines.forEach(line => {
 });
 
 let paths = [];
-dfs('start',[],paths);
-
+dfs('start',[],paths, (c,p) => part1Rule(c,p));
 console.log('Del 1, antal vägar', paths.length);
 
-function dfs(currcave, path, paths) {
-    let connections = caves[currcave];
+paths = [];
+dfs('start',[],paths, (c,p) => part2Rule(c,p));
+//console.table(paths);
+console.log('Del 2, antal vägar', paths.length);
 
-    let visits = path.filter(c => c == currcave).length;
-    if(smallCave(currcave) && visits >= 1) {
+function dfs(currcave, path, paths, rule) {
+
+    if(rule(currcave, path)) {
         return;
     }
 
@@ -36,14 +39,38 @@ function dfs(currcave, path, paths) {
         paths.push(np);
         return;
     }
+    let connections = caves[currcave];
 
     connections.forEach(c => {    
         let np = [...path];
         np.push(currcave);
-        dfs(c, np, paths);
+        dfs(c, np, paths, rule);
     });
 }
 
-function smallCave(cave) {
-    return cave == cave.toLowerCase();
+function part1Rule(cave, path) {
+    let visits = path.filter(c => c == cave).length;
+    return cave == cave.toLowerCase() && visits >= 1;
+}
+
+function part2Rule(cave, path) {
+    if(cave == cave.toLowerCase()) {
+        if(cave == 'start' && path.includes(cave)) return true;
+        let smvisits = path.filter(c => c == c.toLowerCase() && c != 'start' && c != 'end');
+        //console.log(path,cave, smvisits);
+        let small = [];
+
+        // [ 'start', 'b', 'A', 'b', 'A' ] c [ 'b', 'b' ]
+        // [ b: 2 ] true
+
+        let once = 0;
+        smvisits.forEach(c => {
+            if(!small[c]) small[c] = 0;
+            small[c]++;
+            if(small[c] > 1) once++;
+        });
+        //console.log(small, once);
+        return once > 1;
+    } 
+    return false;
 }
