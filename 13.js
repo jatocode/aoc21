@@ -25,7 +25,7 @@ for (let i = 0; i < lines.length; i++) {
     }
 };
 
-// Fold once
+// Fold 
 foldit();
 print();
 
@@ -49,24 +49,19 @@ function foldit(numfolds = folds.length) {
 }
 
 function foldup(amount) {
-    let y2 = 0;
     for (let y = 2 * amount; y >= amount; y--) {
         for (let x = 0; x <= width; x++) {
             let p = paper[x + ':' + y];
-            if (p == '#') paper[x + ':' + y2] = p;
+            if (p == '#') paper[x + ':' + (2*amount - y)] = p;
         }
-        y2 += 1;
     }
 }
 
 function foldleft(amount) {
     for (let y = 0; y <= height; y++) {
-        let x2 = 0;
         for (let x = 2 * amount; x >= 0; x--) {
-            let p = paper[x2 + ':' + y];
-            //console.log(x2, y, p, x, y);
-            if (p == '#') paper[x + ':' + y] = p;
-            x2++;
+            let p = paper[x + ':' + y];
+            if (p == '#') paper[(2*amount - x) + ':' + y] = p;
         }
     }
 }
@@ -83,12 +78,13 @@ function count(maxx = width, maxy = height) {
 
 function print(maxx = width, maxy = height) {
     for (let y = 0; y <= maxy; y++) {
-        let line = '';
+        let line = '| ';
         for (let x = 0; x <= maxx; x++) {
             let e = paper[x + ':' + y];
             if (e == undefined) line += ' ';
             else line += e;
         }
+        line += ' |';
         console.log(line);
     }
     console.log();
