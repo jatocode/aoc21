@@ -18,10 +18,10 @@ for (let i = 0; i < lines.length; i++) {
         const [_, d, a] = line.match(/fold along ([a-z]+)=(\d+)/)
         folds.push([d, parseInt(a)]);
     } else {
-        const [_, x, y] = line.match(/(\d+),(\d+)/);
+        const [_, x, y] = line.match(/(\d+),(\d+)/).map(x => parseInt(x));
         paper[x + ':' + y] = '#';
         height++;
-        width = parseInt(x) > width ? parseInt(x) : width;
+        width = x > width ? x : width;
     }
 };
 
@@ -34,12 +34,12 @@ function foldit(numfolds = folds.length) {
         const fold = folds[f];
         switch (fold[0]) {
             case 'x':
-                console.log('Folding left, width is', width, 'fold is', fold[1]);
+                console.log('Folding left', fold[1]);
                 foldleft(fold[1]);
                 width = fold[1] - 1;
                 break;
             case 'y':
-                console.log('Folding up, height is', height, 'fold is', fold[1]);
+                console.log('Folding up', fold[1]);
                 foldup(fold[1]);
                 height = fold[1] - 1;
                 break;
