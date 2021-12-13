@@ -1,4 +1,3 @@
-const { on } = require('events');
 const fs = require('fs');
 const args = process.argv.slice(2);
 
@@ -28,6 +27,8 @@ for (let i = 0; i < lines.length; i++) {
 // Fold 
 foldit();
 print();
+
+console.log('Efter 1 vikning får jag 711, det borde vara 731...');
 
 function foldit(numfolds = folds.length) {
     for (let f = 0; f < numfolds; f++) {
