@@ -19,7 +19,7 @@ for (let i = 0; i < lines.length; i++) {
         folds.push([d, parseInt(a)]);
     } else {
         const [_, x, y] = line.match(/(\d+),(\d+)/).map(x => parseInt(x));
-        paper[x + ':' + y] = '#';
+        paper[x + ':' + y] = true;
         height++;
         width = x > width ? x : width;
     }
@@ -49,19 +49,17 @@ function foldit(numfolds = folds.length) {
 }
 
 function foldup(amount) {
-    for (let y = 2 * amount; y >= amount; y--) {
+    for (let y = 2 * amount; y > amount; y--) {
         for (let x = 0; x <= width; x++) {
-            let p = paper[x + ':' + y];
-            if (p == '#') paper[x + ':' + (2*amount - y)] = p;
+            paper[x + ':' + (2*amount - y)] = paper[x + ':' + (2*amount - y)] || paper[x + ':' + y];
         }
     }
 }
 
 function foldleft(amount) {
     for (let y = 0; y <= height; y++) {
-        for (let x = 2 * amount; x >= 0; x--) {
-            let p = paper[x + ':' + y];
-            if (p == '#') paper[(2*amount - x) + ':' + y] = p;
+        for (let x = 2 * amount; x > amount; x--) {
+            paper[(2*amount - x) + ':' + y] = paper[(2*amount - x) + ':' + y] || paper[x + ':' + y];
         }
     }
 }
@@ -70,21 +68,20 @@ function count(maxx = width, maxy = height) {
     let points = 0;
     for (let y = 0; y <= maxy; y++) {
         for (let x = 0; x <= maxx; x++) {
-            if (paper[x + ':' + y] == '#') points++;
+            if (paper[x + ':' + y]) points++;
         }
     }
     return points;
 }
 
 function print(maxx = width, maxy = height) {
-    for (let y = 0; y <= maxy; y++) {
-        let line = '| ';
-        for (let x = 0; x <= maxx; x++) {
-            let e = paper[x + ':' + y];
-            if (e == undefined) line += ' ';
-            else line += e;
+    for (let y = 0; y <=maxy; y++) {
+        let line = '';
+        for (let x = 0; x < maxx; x++) {
+            if (paper[x + ':' + y] == undefined) line += '.';
+            else line += '█';
         }
-        line += ' |';
+        line += '';
         console.log(line);
     }
     console.log();
