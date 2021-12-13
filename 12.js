@@ -6,16 +6,15 @@ const input = fs.readFileSync(args[0], 'utf8');
 let lines = input.split(/\r?\n/);
 
 let caves = [];
-let small = [];
 lines.forEach(line => {
     const [_, a, b] = line.match(/([a-zA-Z]+)-([a-zA-Z]+)/);
+
     if (caves[a] == undefined) caves[a] = [];
     if (caves[b] == undefined) caves[b] = [];
+
     caves[b].push(a);
     caves[a].push(b);
 
-    if (a == a.toLowerCase()) small[a] = 0;
-    if (b == b.toLowerCase()) small[b] = 0;
 });
 
 let paths = [];
