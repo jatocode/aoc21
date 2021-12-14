@@ -47,7 +47,9 @@ Object.keys(counts).forEach(c => {
     min = counts[c] < min ? counts[c] : min;
 });
 
-console.log(steps,counts,max,min,max - min);
+console.log(steps,counts,max,min,'Max - min: ', max - min);
+
+console.log('Del 2: Borde kunna göra som med fiskarna, bara räkna antal par av varje regel och sen slå ihop?')
 
 function count(arr) {
     return arr.reduce((prev, curr) => (prev[curr] = ++prev[curr] || 1, prev), {})
