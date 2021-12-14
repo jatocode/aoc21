@@ -78,7 +78,7 @@ function count(maxx = width, maxy = height) {
 function print(maxx = width, maxy = height) {
     for (let y = 0; y <=maxy; y++) {
         let line = '';
-        for (let x = 0; x < maxx; x++) {
+        for (let x = 0; x <= maxx; x++) {
             if (paper[x + ':' + y] == undefined) line += '.';
             else line += '█';
         }
