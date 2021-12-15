@@ -15,12 +15,29 @@ for (let y = 0; y < lines.length; y++) {
         cavern[x + ':' + y] = parseInt(risk);
     }
 };
-const [width, height] = [lines[0].length - 1, lines.length - 1];
+const [twidth, theight] = [lines[0].length, lines.length];
+const width = twidth * 5;
+const height = theight * 5;
+for (let y = 0; y < height; y++) {
+    for (let x = 0; x < width; x++) {
+        let fx = x - (twidth) < 0 ? x : x - (twidth);
+        let fy = y - (theight) < 0 ? y : y - (theight);
 
-//print(map);
+        let from = y < theight ? fx + ':' + y : x + ':' + fy;
+        let to = x + ':' + y;
+
+        let risk = cavern[from] + 1 > 9 ? 1 : cavern[from] + 1;
+        
+        if(x > 9 || y > 9) cavern[to] = risk;
+        //console.log(from, '->', to, risk);
+    }
+}
+//print(cavern, 50, 50);
 let leastcost = findpath('0:0');
-print(cavern);
-console.log('Del 1:', leastcost);
+//print(cavern, 50, 50);
+
+// print(cavern);
+console.log('Del 2:', leastcost);
 
 function findpath(pos) {
     let visited = new Set();
@@ -29,9 +46,11 @@ function findpath(pos) {
     let cost = [];
     camefrom[pos] = '*';
     cost[pos] = 0;
-    let goal = width + ':' + height;
+    let goal = (width - 1) + ':' + (height - 1);
 
+    console.log(goal, cavern[goal]);
     let current = pos;
+    let s = 0;
     while (current) {
         if (visited.has(current)) continue;
         if (current == goal) {
@@ -50,14 +69,15 @@ function findpath(pos) {
         unvisited.delete(current);
 
         let un = [...unvisited]
-            .map(x => { return { pos: x, cost: cost[x] == undefined ? Infinity : cost[x] }})
+            .map(x => { return { pos: x, cost: cost[x] == undefined ? Infinity : cost[x] } })
             .sort((a, b) => a.cost - b.cost);
 
+        if(s++ % 500 == 0) console.log('Unvisited count', unvisited.size);
         // Prova den med minst kostnad nu
         current = un[0].pos;
     }
 
-    // Skriv ut vägen för skojs skull
+    //Skriv ut vägen för skojs skull
     let c = goal;
     let path = [];
     while (c != '0:0') {
@@ -87,15 +107,16 @@ function neighbours(pos) {
     ];
 };
 
-function print(karta) {
-    for (let y = 0; y < lines.length; y++) {
+function print(karta, w = lines[0].length, h = lines.length) {
+    for (let y = 0; y < h; y++) {
         let line = '';
-        for (let x = 0; x < lines[0].length; x++) {
+        for (let x = 0; x < w; x++) {
             let e = karta[x + ':' + y];
-            line += e == undefined ? ' ' : e;
+            line += e == undefined ? '?' : e;
             line += map[x + ':' + y] == undefined ? ' ' : '*';
         }
         console.log(line);
+
     }
     console.log();
 }
