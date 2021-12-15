@@ -51,6 +51,7 @@ function findpath(pos) {
     console.log(goal, cavern[goal]);
     let current = pos;
     let s = 0;
+    let now = Date.now();
     while (current) {
         if (visited.has(current)) continue;
         if (current == goal) {
@@ -72,7 +73,14 @@ function findpath(pos) {
             .map(x => { return { pos: x, cost: cost[x] == undefined ? Infinity : cost[x] } })
             .sort((a, b) => a.cost - b.cost);
 
-        if(s++ % 500 == 0) console.log('Unvisited count', unvisited.size);
+        const tc = 100;
+        if(s++ % tc == 0) {
+            let elapsed = Date.now() - now;
+            const size = unvisited.size;
+            let estimate = Math.round(elapsed / tc * size / 1000 / 60);
+            console.log('Unvisited count', size, 'est min left:', estimate);
+            now = Date.now();
+        }
         // Prova den med minst kostnad nu
         current = un[0].pos;
     }
