@@ -23,7 +23,8 @@ print(cavern);
 console.log('Del 1:', leastcost);
 
 function findpath(pos) {
-    let visited = [];
+    let visited = new Set();
+    let unvisited = new Set(Object.keys(cavern));
     let camefrom = [];
     let cost = [];
     camefrom[pos] = '*';
@@ -31,14 +32,13 @@ function findpath(pos) {
     let goal = width + ':' + height;
 
     let current = pos;
-    let i = 0;
     while (current) {
-        if (visited.includes(current)) continue;
+        if (visited.has(current)) continue;
         if (current == goal) {
             break;
         }
 
-        let nbs = neighbours(current).filter(x => !visited.includes(x));
+        let nbs = neighbours(current).filter(x => !visited.has(x));
         nbs.forEach(nb => {
             let nc = cost[current] + cavern[nb];
             if (!cost[nb] || nc < cost[nb]) {
@@ -46,21 +46,15 @@ function findpath(pos) {
                 cost[nb] = nc;
             }
         })
-        visited.push(current);
+        visited.add(current);
+        unvisited.delete(current);
 
-        // Vill ha ej besökta, sorterat på kostnad
-        let un = Object.keys(cavern).filter(x => !visited.includes(x))
-            .map(x => {
-                return {
-                    pos: x, cost: cost[x] == undefined ? Infinity : cost[x]
-                }
-            })
+        let un = [...unvisited]
+            .map(x => { return { pos: x, cost: cost[x] == undefined ? Infinity : cost[x] }})
             .sort((a, b) => a.cost - b.cost);
 
-            
         // Prova den med minst kostnad nu
         current = un[0].pos;
-
     }
 
     // Skriv ut vägen för skojs skull
@@ -90,7 +84,7 @@ function neighbours(pos) {
         //   (x - 1) + ':' + (y - 1),
         x + ':' + (y - 1),
         //    (x + 1) + ':' + (y - 1),
-    ].filter(p => cavern[p]);
+    ];
 };
 
 function print(karta) {
