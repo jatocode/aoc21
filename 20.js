@@ -20,23 +20,16 @@ for (let i = 0; i < lines.length; i++) {
         height++;
     }
 };
-let memonine = memoizer(ninepixel);
 
-let step = 1;
+let step = 1;  // Global variabel, ser ni mig göra det utanför AoC så skjut mig
+
 print(0);
-console.log('1st pass');
-imgMap = enhanceall(10, step);
-console.log('antal tända: ', [...imgMap.keys()].filter(x => imgMap.get(x) == '1').length);
+for (step = 1; step <= 50; step++) {
+    imgMap = enhanceall(step * 2);
+}
+console.log(`Antal tända efter steg ${step}:`, [...imgMap.keys()].filter(x => imgMap.get(x) == '1').length);
 
-print(10);
-step++;
-console.log('2nd pass');
-imgMap = enhanceall(30, step);
-print(5);
-
-console.log('Del 1: Antal tända: ', [...imgMap.keys()].filter(x => imgMap.get(x) == '1').length);
-
-function enhanceall(offset = 2, step) {
+function enhanceall(offset = 2) {
     let newmap = new Map();
     for (let y = 0 - offset; y < height + offset; y++) {
         for (let x = 0 - offset; x < width + offset; x++) {
@@ -48,7 +41,7 @@ function enhanceall(offset = 2, step) {
 
 function enhance(x, y) {
     let pix = neighboursPix(x, y);
-    let np = memonine(pix.join(''));
+    let np = ninepixel(pix.join(''));
 
     return np;
 }
