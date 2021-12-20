@@ -28,7 +28,7 @@ print(0);
 for (step = 1; step <= 50; step++) {
     imgMap = enhanceall(step * 2);
 }
-console.log(`Antal tända efter steg ${step}:`, [...imgMap.keys()].filter(x => imgMap.get(x) == '1').length);
+console.log(`Antal tända efter steg ${step - 1}:`, [...imgMap.keys()].filter(x => imgMap.get(x) == '1').length);
 
 function enhanceall(offset = 2) {
     let newmap = new Map();
@@ -48,8 +48,7 @@ function enhance(x, y) {
 }
 
 function ninepixel(pixels) {
-    let pix = pixels; 
-    return algo[parseInt(pix, 2)]
+    return algo[parseInt(pixels, 2)]
 }
 
 function pixel(x, y) {
