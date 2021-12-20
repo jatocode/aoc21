@@ -5,7 +5,6 @@ const input = fs.readFileSync(args[0], 'utf8');
 let lines = input.split(/\r?\n/);
 
 let algo;
-let img = [];
 let imgMap = new Map();
 let [width, height] = [0, 0];
 for (let i = 0; i < lines.length; i++) {
@@ -16,7 +15,6 @@ for (let i = 0; i < lines.length; i++) {
     } else {
         width = line.length;
         for (let x = 0; x < line.length; x++) {
-            img[x + ':' + height] = line[x] == '#' ? '1' : '0';
             imgMap.set(x + ':' + height, line[x] == '#' ? '1' : '0');
         }
         height++;
@@ -24,40 +22,28 @@ for (let i = 0; i < lines.length; i++) {
 };
 let memonine = memoizer(ninepixel);
 
-print();
+let step = 1;
+print(0);
 console.log('1st pass');
-img = enhanceall(110);
-console.log('Size',Object.keys(img).length);
-console.log('antal tända: ', Object.keys(img).filter(x => img[x] == '1').length);
+imgMap = enhanceall(10, step);
+console.log('antal tända: ', [...imgMap.keys()].filter(x => imgMap.get(x) == '1').length);
 
-//print(5);
+print(10);
+step++;
 console.log('2nd pass');
-img = enhanceall(110);
-console.log('Size',Object.keys(img).length);
+imgMap = enhanceall(30, step);
 print(5);
 
-console.log('Del 1: Antal tända: ', Object.keys(img).filter(x => img[x] == '1').length);
+console.log('Del 1: Antal tända: ', [...imgMap.keys()].filter(x => imgMap.get(x) == '1').length);
 
-function enhanceall(offset = 2) {
-    let newi = [];
+function enhanceall(offset = 2, step) {
     let newmap = new Map();
     for (let y = 0 - offset; y < height + offset; y++) {
         for (let x = 0 - offset; x < width + offset; x++) {
-            newi[x + ':' + y] = enhance(x, y);
             newmap.set(x + ':' + y,  enhance(x, y));
         }
     }
-    return newi;
-}
-
-function enhanceall2(offset = 2) {
-    let newi = Object.keys(img).map(x => x);
-    for (let y = 0 - offset; y < height + offset; y++) {
-        for (let x = 0 - offset; x < width + offset; x++) {
-            newi[x + ':' + y] = enhance(x, y);
-        }
-    }
-    return newi;
+    return newmap;
 }
 
 function enhance(x, y) {
@@ -75,10 +61,11 @@ function ninepixel(pixels) {
 }
 
 function pixel(x, y) {
-    //let p = imgMap.get(x + ':' + y); 
-    //return p == undefined ? '0' : p;
-
-    return img[x + ':' + y] == undefined ? '0' : img[x + ':' + y];
+    let p = imgMap.get(x + ':' + y);
+    
+    let bg = step % 2 == 0 ? '1' : '0';
+    
+    return p == undefined ? bg : p;
 }
 
 function neighboursPix(x, y) {
