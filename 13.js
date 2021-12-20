@@ -19,7 +19,7 @@ for (let i = 0; i < lines.length; i++) {
     } else {
         const [_, x, y] = line.match(/(\d+),(\d+)/).map(x => parseInt(x));
         paper[x + ':' + y] = true;
-        height++;
+        height = y > height ? y : height;
         width = x > width ? x : width;
     }
 };
@@ -27,8 +27,6 @@ for (let i = 0; i < lines.length; i++) {
 // Fold 
 foldit();
 print();
-
-console.log('Efter 1 vikning får jag 711, det borde vara 731...');
 
 function foldit(numfolds = folds.length) {
     for (let f = 0; f < numfolds; f++) {
