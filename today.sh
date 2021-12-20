@@ -16,5 +16,5 @@ else
     input="data/$today-input.txt"
 fi
 echo $input
-node "$today.js" $input
+time node "$today.js" $input
 echo
