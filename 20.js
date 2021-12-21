@@ -21,13 +21,14 @@ for (let i = 0; i < lines.length; i++) {
     }
 };
 
-let step = 1;  // Global variabel, ser ni mig göra det utanför AoC så skjut mig
 
+let step = 0;  // Global variabel, ser ni mig göra det utanför AoC så skjut mig
 print(0);
+
 for (step = 1; step <= 50; step++) {
     imgMap = enhanceall(step * 2);
 }
-console.log(`Antal tända efter steg ${step}:`, [...imgMap.keys()].filter(x => imgMap.get(x) == '1').length);
+console.log(`Antal tända efter steg ${step - 1}:`, [...imgMap.keys()].filter(x => imgMap.get(x) == '1').length);
 
 function enhanceall(offset = 2) {
     let newmap = new Map();
@@ -47,15 +48,13 @@ function enhance(x, y) {
 }
 
 function ninepixel(pixels) {
-    let pix = pixels; 
-    if (algo[parseInt(pix, 2)] == undefined) pix.error = true;
-    // console.log(pix, parseInt(pix, 2), algo[parseInt(pix, 2)]);
-    return algo[parseInt(pix, 2)]
+    return algo[parseInt(pixels, 2)]
 }
 
 function pixel(x, y) {
     let p = imgMap.get(x + ':' + y);
     
+    // Visar sig att "infinity" blinkar varje steg pga algoritmen. TRICKY!
     let bg = step % 2 == 0 ? '1' : '0';
     
     return p == undefined ? bg : p;
@@ -87,17 +86,4 @@ function print(offset = 5) {
         console.log(line);
     }
     console.log();
-}
-
-function memoizer(fun) {
-    let cache = {}
-    return function (n) {
-        if (cache[n] != undefined) {
-            return cache[n]
-        } else {
-            let result = fun(n)
-            cache[n] = result
-            return result
-        }
-    }
 }
