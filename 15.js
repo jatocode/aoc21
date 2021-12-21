@@ -1,5 +1,6 @@
 const fs = require('fs');
 const args = process.argv.slice(2);
+const pql = require('./utils/prioqueue');
 
 const input = fs.readFileSync(args[0], 'utf8');
 let lines = input.split(/\r?\n/);
@@ -28,20 +29,16 @@ for (let y = 0; y < height; y++) {
 
         let risk = cavern[from] + 1 > 9 ? 1 : cavern[from] + 1;
         
-        if(x > 9 || y > 9) cavern[to] = risk;
-        //console.log(from, '->', to, risk);
+        if(x > (twidth-1)|| y > (theight-1)) cavern[to] = risk;
     }
 }
-//print(cavern, 50, 50);
 let leastcost = findpath('0:0');
-//print(cavern, 50, 50);
 
-// print(cavern);
 console.log('Del 2:', leastcost);
 
 function findpath(pos) {
     let visited = new Set();
-    let unvisited = new Set(Object.keys(cavern));
+    let pq = new pql.PriorityQueue();
     let camefrom = [];
     let cost = [];
     camefrom[pos] = '*';
@@ -50,9 +47,10 @@ function findpath(pos) {
 
     console.log(goal, cavern[goal]);
     let current = pos;
-    let s = 0;
-    let now = Date.now();
-    while (current) {
+
+    pq.enqueue(current,Infinity);
+    while (pq.size() > 0) {
+        current = pq.dequeue();
         if (visited.has(current)) continue;
         if (current == goal) {
             break;
@@ -60,29 +58,15 @@ function findpath(pos) {
 
         let nbs = neighbours(current).filter(x => !visited.has(x));
         nbs.forEach(nb => {
-            let nc = cost[current] + cavern[nb];
+            let c = cavern[nb] == undefined ? Infinity : cavern[nb];
+            let nc = cost[current] + c;
             if (!cost[nb] || nc < cost[nb]) {
                 camefrom[nb] = current;
                 cost[nb] = nc;
+                pq.enqueue(nb, nc);
             }
         })
         visited.add(current);
-        unvisited.delete(current);
-
-        let un = [...unvisited]
-            .map(x => { return { pos: x, cost: cost[x] == undefined ? Infinity : cost[x] } })
-            .sort((a, b) => a.cost - b.cost);
-
-        const tc = 100;
-        if(s++ % tc == 0) {
-            let elapsed = Date.now() - now;
-            const size = unvisited.size;
-            let estimate = Math.round(elapsed / tc * size / 1000 / 60);
-            console.log('Unvisited count', size, 'est min left:', estimate);
-            now = Date.now();
-        }
-        // Prova den med minst kostnad nu
-        current = un[0].pos;
     }
 
     //Skriv ut vägen för skojs skull
@@ -97,6 +81,7 @@ function findpath(pos) {
     path.push('0:0');
     path.reverse();
 
+    console.log(path.length);
     return cost[goal];
 }
 
@@ -105,13 +90,9 @@ function neighbours(pos) {
 
     return [
         (x + 1) + ':' + y,
-        //   (x + 1) + ':' + (y + 1),
-        x + ':' + (y + 1),
-        // (x - 1) + ':' + (y + 1),
+         x + ':' + (y + 1),
         (x - 1) + ':' + y,
-        //   (x - 1) + ':' + (y - 1),
         x + ':' + (y - 1),
-        //    (x + 1) + ':' + (y - 1),
     ];
 };
 
