@@ -17,6 +17,7 @@ async function day15() {
             cavern[x + ':' + y] = parseInt(risk);
         }
     };
+
     const [twidth, theight] = [lines[0].length, lines.length];
     const width = twidth * 5;
     const height = theight * 5;
@@ -31,11 +32,18 @@ async function day15() {
             let risk = cavern[from] + 1 > 9 ? 1 : cavern[from] + 1;
 
             if (x > (twidth - 1) || y > (theight - 1)) cavern[to] = risk;
-        }
-    }
 
+            ctx.fillStyle = 'rgb(' + Math.floor(255-20.5*risk)+ ','+  Math.floor(255 - 42.5*risk) + ',255)';
+            ctx.beginPath();
+            ctx.fillRect(x, y, 1, 1);
+            ctx.stroke();
+
+        }
+
+    }
+    //print(500, 500);
     let leastcost = findpath('0:0');
-    print(500, 500);
+    //print(500, 500);
 
     console.log('Del 2:', leastcost);
 
@@ -58,7 +66,7 @@ async function day15() {
             if (current == goal) {
                 break;
             }
-
+            
             let nbs = neighbours(current).filter(x => !visited.has(x));
             nbs.forEach(nb => {
                 let c = cavern[nb] == undefined ? Infinity : cavern[nb];
@@ -70,15 +78,18 @@ async function day15() {
                 }
             })
             visited.add(current);
+           // plot(current);
+
         }
 
         //Skriv ut vägen för skojs skull
         let c = goal;
         let path = [];
         while (c != '0:0') {
+            plot(c);
             path.push(c)
             c = camefrom[c]
-            map[c] = cavern[c]; //'*';
+            map[c] = cavern[c]; 
         }
         map[goal] = cavern[goal];
         path.push('0:0');
@@ -100,9 +111,6 @@ async function day15() {
     };
 
     function print(w = lines[0].length, h = lines.length) {
-        //ctx.beginPath();
-        //ctx.fillRect(100,100,1,1);
-        //ctx.stroke();
         for (let y = 0; y < h; y++) {
             for (let x = 0; x < w; x++) {
                 let e = cavern[x + ':' + y];
@@ -112,17 +120,18 @@ async function day15() {
                 ctx.stroke();
 
                 if (map[x + ':' + y] != undefined) {
-                    ctx.beginPath();
-                    ctx.fillStyle = 'rgb(0,0,0)';
-                    ctx.fillRect(x, y, 1, 1);
-                    ctx.stroke();
+                  //  plot(x + ':' + y);
                 }
-
-
-                //line += e == undefined ? '?' : e;
-                //line += map[x + ':' + y] == undefined ? ' ' : '*';
             }
         }
+    }
+
+    function plot(pos) {
+        const [x, y] = pos.split(':').map(x => parseInt(x));
+        ctx.beginPath();
+        ctx.fillStyle = 'rgb(0,255,0)';
+        ctx.fillRect(x, y, 1, 1);
+        ctx.stroke();
     }
 }
 
