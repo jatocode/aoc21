@@ -24,8 +24,7 @@ while(move > 0) {
     move += moveherd(east, eastnext);
     move += moveherd(south, southnext);
     step++;
-    console.log(step, move);
-    //print(step);
+//    print(step);
 }
 console.log('Del 1, steg', step);
 
